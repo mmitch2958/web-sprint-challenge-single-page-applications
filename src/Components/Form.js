@@ -32,6 +32,7 @@ const Form = () => {
         anchovies: false,
         hawian: false,
         seaFood: false,
+        quantity: '',
     }) 
 
     const [errors, setErrors] = useState({
@@ -44,6 +45,7 @@ const Form = () => {
         anchovies: '',
         hawian: '',
         seaFood: '',
+        quantity: '',
     })
 
 //  Form Schema 
@@ -58,6 +60,7 @@ const Form = () => {
         anchovies: yup.string().notRequired(),
         hawian: yup.string().notRequired(),
         seaFood: yup.string().notRequired(),
+        quantity: yup.strig
 
     })
 
@@ -206,7 +209,7 @@ return (
                 </label>
         <br /> 
         
-
+{/* 
                 <label htmlFor='quantity'>
                     <select id="quantity" name="quantity" onChange={inChange} value={orderState.quantity}>
                         <option>Select Quantity</option>
@@ -215,12 +218,13 @@ return (
                         <option value='3'>3</option>
                         <option value='4'>4</option>
                     </select>
-                </label>
+                </label> */}
               
                 <br /> 
-                <button data-cy="submit" disabled={disabledButton}>Add to Order</button>
-
+                
                 <pre>{JSON.stringify(ordered, null, 2)}</pre>
+
+                <button data-cy="submit" disabled={disabledButton}>Add to Order</button>
 
             </form>
             
