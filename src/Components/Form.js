@@ -16,7 +16,7 @@ color: grey;
 
 const Form = () => {
 
-    const (pizzaState, setPizzaState) = useState({
+    const [orderState, setOrderState] = useState({
 
         customerName: '',
         size: '', 
@@ -29,7 +29,7 @@ const Form = () => {
         seaFood: false,
     }) 
 
-    const (err, setErr) = useState({
+    const [err, setErr] = useState({
         customerName: '',
         size: '', 
         sauce: '',
@@ -77,7 +77,7 @@ const Form = () => {
     //Order Validation
 
     const validateOrder = (e) => {
-        yup.reach(orderSchema, e.target.name)
+        yup.reach(pizzaSchema, e.target.name)
         .validate(e.target.value)
         .then((valid) => {
             setErrors({
@@ -92,3 +92,43 @@ const Form = () => {
             })
         })
     }
+
+
+
+    //change and submit functions 
+
+    const inChange = (e) => {
+        e.persist()
+        e.target.type === 'checkbox' ? console.log(e.target.name) : console.log(e.target.value)
+        const newOrder = {
+            ...orderState,
+            [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value
+        }
+        validateOrder(e)
+        setOrderState(newOrder)
+    }
+    }
+
+    
+    const orderSubmit = (e) => {
+        e.preventDefault()
+        axios.post('https://reqres.in/api/users', orderState)
+        .then((res) => {
+            console.log(res.data)
+            setOrdered(res.data)
+            setOrderState({
+                customerName: '',
+                size: '',
+                sauce: '',
+                pepperoni: false,
+                sausage: false,
+                extraCheese: false,
+                anchovies: false,
+                hawian: false,
+                seaFood: false,
+            })
+        })
+        .catch(err => console.log(err))
+    }
+
+    return (
