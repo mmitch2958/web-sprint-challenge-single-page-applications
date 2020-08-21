@@ -4,15 +4,20 @@ import styled from "styled-components"
 import * as yup from 'yup'
 import axios from 'axios'
 
-const container = styled.div`
+const FormContainer = styled.div
 
-display-flex; 
+
+//Styled 
+`
+display: flex; 
 width: 60%;
 border: 2px solid black;
 color: grey;
+background: pink;
 
 `
 
+//Create Form and Form Objects 
 
 const Form = () => {
 
@@ -29,7 +34,7 @@ const Form = () => {
         seaFood: false,
     }) 
 
-    const [err, setErr] = useState({
+    const [errors, setErrors] = useState({
         customerName: '',
         size: '', 
         sauce: '',
@@ -44,7 +49,7 @@ const Form = () => {
 //  Form Schema 
     
     const pizzaSchema = yup.object().shape({
-        customerName: yup.string().required('Please Enter your name'.).min(2, 'Enter atleast 2 charecters for Initials')
+        customerName: yup.string().required("Please provide your name"),
         size: yup.string().oneOf(['small', 'med', 'large', 'x-large'], 'Please select a Pizza Size'),
         sauce: yup.string().oneOf(['original', 'garlic', 'BBQ', 'SpinAlfredo'], 'Please choose your Sause'),
         pepperoni: yup.string().notRequired(),
@@ -74,23 +79,24 @@ const Form = () => {
     }, [orderState, pizzaSchema]);
 
 
-    //Order Validation
-
+   
+//Form Validator 
+    
     const validateOrder = (e) => {
         yup.reach(pizzaSchema, e.target.name)
         .validate(e.target.value)
         .then((valid) => {
-            setErrors({
-                ...errors,
-                [e.target.name]: ''
-            })
+             setErrors({
+                 ...errors,
+                 [e.target.name]: ''
+             })
         })
         .catch((err) => {
-            setErrors({
-                ...errors,
-                [e.target.name]: err.errors[0]
-            })
-        })
+             setErrors({
+                 ...errors,
+                 [e.target.name]: err.errors[0]
+             })
+         })
     }
 
 
@@ -134,18 +140,19 @@ const Form = () => {
 return (
         
     <FormContainer>
+
        <form onSubmit={orderSubmit}>
                 <label htmlFor='customerName'>
                     Your Name:
                     <input type="text" name="customerName" 
                     data-cy="customerName"
-                    id="customerName" value={orderState.customerName} onChange={inputChange}/>
+                    id="customerName" value={orderState.customerName} onChange={inChange}/>
                 </label>
-                {errors.customerName.length > 0 ? <ErrorP>{errors.customerName}</ErrorP> : null}
+              
                 <br />
                 <label htmlFor='size'>
                 Choice of Size:  <br /> 
-                <select name="size" id="size" onChange={inputChange} value={orderState.size}>
+                <select name="size" id="size" onChange={inChange} value={orderState.size}>
                     <option>Please select a size:</option>
                     <option value="small">small</option>
                     <option value="med">Medium</option>
@@ -153,12 +160,12 @@ return (
                     <option value="x-large">X-Large</option>
                 </select>
                 </label>
-                {errors.size.length > 0 ? <ErrorP>{errors.size}</ErrorP> : null}
+ 
                 <br /> 
                 Choice of Sauce: 
                 <br /> 
                 <label htmlFor='sauce'>
-                <select name="sauce" id="sauce" cy-data="sauce" onChange={inputChange} value={orderState.sauce}>
+                <select name="sauce" id="sauce" cy-data="sauce" onChange={inChange} value={orderState.sauce}>
                     <option>Please select a sauce:</option>
                     <option value="original">Original Red</option>
                     <option value="garlic">Garlic Ranch</option>
@@ -170,38 +177,38 @@ return (
                 Add Toppings:<br />
                 Choose up to 3<br />
                 <label htmlFor="pepperoni">
-                    <input type="checkbox" name="pepperoni" id="pepperoni" onChange={inputChange} checked={orderState.pepperoni} />
+                    <input type="checkbox" name="pepperoni" id="pepperoni" onChange={inChange} checked={orderState.pepperoni} />
                     Pepperoni
                 </label>
                 <br /> 
                 <label htmlFor="sausage">
-                    <input type="checkbox" name="sausage" id="sausage" onChange={inputChange} checked={orderState.sausage} />
+                    <input type="checkbox" name="sausage" id="sausage" onChange={inChange} checked={orderState.sausage} />
                     Sausage
                 </label>
                 <br /> 
                 <label htmlFor="extra-cheese">
-                    <input type="checkbox" name="extra-cheese" id="extra-cheese" onChange={inputChange} checked={orderState.extracheese} />
+                    <input type="checkbox" name="extra-cheese" id="extra-cheese" onChange={inChange} checked={orderState.extraCheese} />
                     Extra-Cheese
                 </label>
         <br />
         
                     <label htmlFor="anchovies">
-                    <input type="checkbox" name="anchovies" id="anchovies" onChange={inputChange} checked={orderState.anchovies} />
+                    <input type="checkbox" name="anchovies" id="anchovies" onChange={inChange} checked={orderState.anchovies} />
                     Anchovies
                 </label>
                 <br />  <label htmlFor="hawian">
-                    <input type="checkbox" name="hawian" id="hawian" onChange={inputChange} checked={orderState.hawian} />
+                    <input type="checkbox" name="hawian" id="hawian" onChange={inChange} checked={orderState.hawian} />
                     Hawian
                 </label>
                 <br />  <label htmlFor="seaFood">
-                    <input type="checkbox" name="seaFood" id="seaFood" onChange={inputChange} checked={orderState.seaFood} />
+                    <input type="checkbox" name="seaFood" id="seaFood" onChange={inChange} checked={orderState.seaFood} />
                     seaFood
                 </label>
         <br /> 
         
 
                 <label htmlFor='quantity'>
-                    <select id="quantity" name="quantity" onChange={inputChange} value={orderState.quantity}>
+                    <select id="quantity" name="quantity" onChange={inChange} value={orderState.quantity}>
                         <option>Select Quantity</option>
                         <option value='1'>1</option>
                         <option value='2'>2</option>
@@ -209,7 +216,7 @@ return (
                         <option value='4'>4</option>
                     </select>
                 </label>
-                {errors.quantity.length > 0 ? <ErrorP>{errors.quantity}</ErrorP> : null}
+              
                 <br /> 
                 <button data-cy="submit" disabled={disabledButton}>Add to Order</button>
 
